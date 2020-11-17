@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+
+	<select id="selectAllReview" resultType="ReviewVO" parameterType="int">
+		select * from review1 where board_seq1 = #{board_seq1} order by revw_dt asc
+	</select>
+ 	
+ 	<update id="deleteReview" parameterType="int" >
+   		 UPDATE review1 SET revw_del = 2 WHERE revw_seq1 = #{revw_seq1}
+    </update>
+    
+    <insert id="insertReview" parameterType="ReviewVO">
+   		INSERT INTO review1 VALUES(review_seq.nextval, #{revw_cont}, sysdate, 1, #{mem_id}, #{board_seq1})
+   	</insert> 
+ 
+</mapper> 
+ 

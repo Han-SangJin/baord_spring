@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="attach">
+
+	<select id="selectAttach" resultType="AttachVO" parameterType="int">
+		SELECT * FROM attachfile1 WHERE file_seq1 = #{file_seq1}
+	</select>
+
+
+	<select id="selectAllAttach" resultType="AttachVO" parameterType="int">
+		select * from attachfile1 where board_Seq1 = #{board_seq1}
+	</select>
+ 	
+<!--     
+     insert 쿼리 list 넣기 변경
+ 	<insert id="insertAttach" parameterType="AttachVO">
+    	<selectKey keyProperty="board_seq1" order="BEFORE" resultType="int">
+   			select board_seq.currval from dual
+   		</selectKey>
+   		
+   		insert into attachfile1 values(file_seq.nextval, #{file_name}, #{file_real_name}, #{board_seq1})
+   	</insert>  
+-->
+   	 
+   		
+   	
+   	 <insert id="insertAttach" parameterType="java.util.List">
+   	 	<selectKey keyProperty="board_seq1" order="BEFORE" resultType="int">
+   			select board_seq.currval from dual
+   		</selectKey>
+   	 	
+		INSERT INTO attachfile1 ( FILE_SEQ1, FILE_NAME, FILE_REAL_NAME, BOARD_SEQ1 ) 
+		   	SELECT file_seq.nextval as file_seq1, T.* , #{board_seq1} as board_seq1
+		   		FROM ( 
+			   		<foreach collection="list" item="item" index="index" separator="union all"> 
+			   			SELECT #{item.file_name} as file_name 
+			   				 , #{item.file_real_name} as file_real_name  
+			   			 FROM dual
+			   		</foreach> 
+		 		) T 
+   	 </insert> 
+   	 
+   	 
+   	<!-- 게시판 업데이트 	// BOARD_TITLE, BOARD_CONT, FILE_NAME, FILE_REAL_NAME
+   		게시판 업데이트 하는 dao, service 
+   		파일 업데이트 하는 dao, service
+   		두개가 필요함
+   	 -->
+	<update id="updateAttach" parameterType="java.util.List">
+		<foreach item="attch" collection="list" index="index" separator="union all">
+				UPDATE attachfile1 SET file_name = #{attch.file_name}, file_real_name = #{attch.file_real_name}
+				WHERE file_seq1 = #{attch.file_seq1}
+		</foreach>
+	</update>
+	
+	
+	  <!-- select file_seq1 from attachfile1 where file_seq1 = #{attch.file_seq1} FROM dual -->
+	<!-- 파일 삭제 -->
+   	<delete id="deleteAttach" parameterType="java.util.List">
+		DELETE FROM ATTACHFILE1 			
+		<where>	
+			<foreach item="attch" collection="list" index="index" separator="OR" open="" close="">
+				( file_seq1 = #{attch.file_seq1} )
+			</foreach>
+		</where>
+	</delete>
+   	
+   	
+</mapper> 
+ 

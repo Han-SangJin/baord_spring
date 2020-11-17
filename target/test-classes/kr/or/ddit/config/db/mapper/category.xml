@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ctgr">
+<!-- 
+   <select id="getCtgr" parameterType="int" resultType="CtgrVO">
+    	SELECT * 
+    	FROM category1 
+     	WHERE ctgr_seq1 = #{ctgr_seq1}
+   </select>
+    -->
+    
+   <select id="selectAllCtgr" resultType="CtgrVO">
+		SELECT * FROM category1 order by ctgr_seq1 desc
+   </select> 
+   
+   
+   <insert id="insertCtgr" parameterType="CtgrVO">
+   		INSERT INTO category1 VALUES(ctgr_seq.nextval, #{ctgr_name}, #{ctgr_use})
+   </insert>
+    
+  
+   <update id="updateCtgr" parameterType="CtgrVO" >
+   		 UPDATE category1 SET ctgr_use = #{ctgr_use} WHERE ctgr_seq1 = #{ctgr_seq1}
+   </update> 
+   
+   
+</mapper> 
